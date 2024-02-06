@@ -1,3 +1,16 @@
-* {
-    border: 1px solid red;
+body {
+    text-align: center;
+}
+
+.game-display {
+    margin: auto;
+    display: grid;
+    max-width: 500px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+}
+
+.game-cell {
+    width: 100%;
+    aspect-ratio: 1 / 1;
 }

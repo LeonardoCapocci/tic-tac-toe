@@ -1,6 +1,7 @@
 const gameboardModule = (() => {
   // Creating empty array for gameboard
   const gameboard = ["", "", "", "", "", "", "", "", ""];
+  let currentPlayer
 
   // Places mark (X/O) at a certain index spot
   function placeMark(index, markType) {
@@ -8,9 +9,17 @@ const gameboardModule = (() => {
       gameboard[index] += markType;
       console.log(gameboard);
       checkWin();
+
       }
     else console.log("Choose an empty cell 😡")
+    renderModule.renderGameboard(gameboard)
     };
+  
+  // Switches current player
+  function switchPlayer() {
+    if (currentPlayer === "X") currentPlayer = "O"
+    else currentPlayer = "X"
+  }
 
   // Checking if the game is over on placement of mark
   function checkWin() {
@@ -24,11 +33,11 @@ const gameboardModule = (() => {
       const [a, b, c] = combination;
       // X wins
       if (gameboard[a] === 'X' && gameboard[b] === 'X' && gameboard[c] === 'X') {
-        console.log("Over");
+        console.log("X WINS!");
       }
       // O Wins
       if (gameboard[a] === 'O' && gameboard[b] === 'O' && gameboard[c] === 'O') {
-        console.log("Over");
+        console.log("O WINS");
       }
     }
     checkTie();
@@ -48,16 +57,29 @@ const gameboardModule = (() => {
     }
   }
 
-  // placeMark(0,'X');
-  // placeMark(1,'X');
-  // placeMark(2,'O');
-  // placeMark(3,'X');
-  // placeMark(4,'X');
-  // placeMark(5,'O');
-  // placeMark(6,'P');
-  // placeMark(7,'J');
-  // placeMark(8,'T');
   return {
-    placeMark: placeMark
+    placeMark: placeMark,
+    gameboard: gameboard,
   };
 })()
+
+const renderModule = (() => {
+  const gameDisplay = document.querySelector(".game-display");
+
+  function renderGameboard(gameboard) {
+    gameDisplay.innerHTML = "";
+    gameboardModule.gameboard.forEach((cell, index) => {
+      const gameCell = document.createElement('button');
+      gameCell.className = "game-cell";
+      gameCell.textContent = cell;
+      gameDisplay.appendChild(gameCell);
+    })
+  }
+  return {
+    renderGameboard: renderGameboard,
+  };
+})()
+
+gameboardModule.placeMark(0,'X')
+gameboardModule.placeMark(2,'X')
+gameboardModule.placeMark(1,'X')
