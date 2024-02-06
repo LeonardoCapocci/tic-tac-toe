@@ -1,22 +1,27 @@
 const gameboardModule = (() => {
   // Creating empty array for gameboard
-  const gameboard = ["", "", "", "", "", "", "", "", ""];
+  let gameboard = ["", "", "", "", "", "", "", "", ""];
   let currentPlayer = 'X';
   let gameActive = true;
 
   // Places mark (X/O) at a certain index spot
   function placeMark(index) {
-    if (gameActive) {
+    if (gameActive === true) {
       if (gameboard[index] === "") {
         gameboard[index] += currentPlayer;
+        renderModule.renderGameboard(gameboard)
+        getGameboard()
         switchPlayer()
-        console.log(gameboard);
         checkWin();
       }
-      else console.log("Choose an empty cell 😡");
-      renderModule.renderGameboard(gameboard);
+      else {
+        console.log("Choose an empty cell 😡");
+      }
+      // renderModule.renderGameboard(gameboard);
     }
-    else console.log("You already lost 👎")
+    else {
+      console.log("Game is already over 😡")
+    }
   }
   
   // Switches current player
@@ -46,7 +51,9 @@ const gameboardModule = (() => {
         gameActive = false;
       }
     }
-    checkTie();
+    if (gameActive) {
+      checkTie();
+    }
   }
 
   // Checking if there is a tie
@@ -64,37 +71,55 @@ const gameboardModule = (() => {
     }
   }
 
+  function resetGame() {
+    gameboard = ["", "", "", "", "", "", "", "", ""];
+    gameActive = true;
+    currentPlayer = 'X';
+    renderModule.renderGameboard(gameboard)
+  }
+
+  function getGameboard() {
+    console.log(gameboard);
+
+  }
+
   return {
     placeMark: placeMark,
-    gameboard: gameboard
+    resetGame: resetGame,
+    getGameboard: getGameboard,
+    gameboard: gameboard,
   };
 })()
 
+// Sets up event listeners
 const renderModule = (() => {
-  const gameDisplay = document.querySelector(".game-display");
+  const gameCell = document.querySelectorAll('.game-cell');
 
   function renderGameboard(gameboard) {
-    gameDisplay.innerHTML = "";
-    gameboardModule.gameboard.forEach((cell, index) => {
-      const gameCell = document.createElement('button');
-      gameCell.className = "game-cell";
-      gameCell.textContent = cell;
-      gameDisplay.appendChild(gameCell);
+    gameCell.forEach((cell, index) => {
+      cell.textContent = gameboard[index]
+    })
+  }
+
+  function setEventListeners() {
+
+    gameCell.forEach((cell, index) => {
+      cell.addEventListener('click', () => {
+        gameboardModule.placeMark(index);
+      });
     });
   }
   return {
-    renderGameboard: renderGameboard
+    setEventListeners: setEventListeners,
+    renderGameboard: renderGameboard,
   };
 })()
 
-renderModule.renderGameboard()
+renderModule.setEventListeners()
 
-gameboardModule.placeMark(0)
-gameboardModule.placeMark(1)
-gameboardModule.placeMark(8)
-gameboardModule.placeMark(4)
-gameboardModule.placeMark(7)
-gameboardModule.placeMark(2)
-gameboardModule.placeMark(6)
-gameboardModule.placeMark(5)
-gameboardModule.placeMark(3)
+const resetButton = document.querySelector('.reset-button');
+
+resetButton.addEventListener('click', () => {
+  gameboardModule.resetGame();
+  gameboardModule.getGameboard();
+});
