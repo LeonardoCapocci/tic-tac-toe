@@ -42,12 +42,12 @@ const gameboardModule = (() => {
       const [a, b, c] = combination;
       // X wins
       if (gameboard[a] === 'X' && gameboard[b] === 'X' && gameboard[c] === 'X') {
-        console.log("X WINS!");
+        alert("X WINS!");
         gameActive = false;
       }
       // O Wins
       if (gameboard[a] === 'O' && gameboard[b] === 'O' && gameboard[c] === 'O') {
-        console.log("O WINS");
+        alert("O WINS");
         gameActive = false;
       }
     }
@@ -66,7 +66,7 @@ const gameboardModule = (() => {
       }
     }
     if (isTie) {
-      console.log("TIE");
+      alert("TIE");
       gameActive = false;
     }
   }
